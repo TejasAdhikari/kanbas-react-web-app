@@ -3,13 +3,14 @@ import { BsGripVertical } from "react-icons/bs";
 import SingleQuizControlButton from "./SingleQuizControlButton";
 import { IoMdArrowDropdown } from "react-icons/io";
 import QuizControlButtons from "./QuizControlButtons";
-import { FaRegEdit } from "react-icons/fa";
 import AssignmentControls from "./QuizControls";
 import { useParams, useLocation } from "react-router";
 import ProtectedEdit from "../../Account/ProtectedEdit";
 import { setQuizzes } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../client";
+import QuizControls from "./QuizControls";
+import { MdOutlineQuiz } from "react-icons/md";
 
 
 export default function Quizzes() {
@@ -36,7 +37,7 @@ export default function Quizzes() {
     return (
       <div id="wd-assignments">
         <ProtectedEdit>
-          <AssignmentControls/>
+          <QuizControls/>
         </ProtectedEdit> 
         <br /><br /><br /><br />
 
@@ -54,12 +55,12 @@ export default function Quizzes() {
                       <div className="d-flex">
                         <div className="align-self-center me-3">
                           <BsGripVertical className="me-2 fs-3" />
-                          <FaRegEdit className="me-1 text-success"/>
+                          <MdOutlineQuiz className="me-1 text-success"/>
                         </div>
                         <div className="align-self-center flex-grow-1">
                           <a className="wd-assignment-link"
-                            href={currentUser.role === "FACULTY" ? `#/Kanbas/Courses/${cid}/Assignments/${quiz._id}`
-                              : `#/Kanbas/Courses/${cid}/Assignments/`}>
+                            href={currentUser.role === "FACULTY" ? `#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`
+                              : `#/Kanbas/Courses/${cid}/Quizzes/`}>
                             {quiz.title}
                           </a><br />
                           <div className="wd-float-left text-danger me-1">

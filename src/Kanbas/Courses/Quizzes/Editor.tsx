@@ -2,77 +2,77 @@ import { Link, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as db from "../../Database"
 import ProtectedEdit from "../../Account/ProtectedEdit";
-// import { addAssignment, updateAssignment } from "./reducer";
+// import { addquiz, updatequiz } from "./reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import * as coursesClient from "../client";
-import * as assignmentsClient from "./client";
+import * as quizzesClient from "./client";
 
 export default function QuizEditor() {
-    const { cid, aid } = useParams();
-    // const assignments = db.assignments;
-    // Set up local state for form inputs
-    const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-    const assignment = assignments.find((assignment: any) => assignment._id === aid);
-    const [assignmentName, setAssignmentName] = useState("");
-    const [assignmentDesc, setAssignmentDesc] = useState("");
-    const [assignmentPoints, setAssignmentPoints] = useState("");
-    const [assignmentDue, setAssignmentDue] = useState("");
-    const [assignmentFrom, setAssignmentFrom] = useState("");
+    const { cid, qid } = useParams();
     
-    const createAssignmentForCourse = async () => {
+    // Set up local state for form inputs
+    const { quizzes } = useSelector((state: any) => state.quizzesReducer);
+    const quiz = quizzes.find((quiz: any) => quiz._id === qid);
+    const [quizName, setquizName] = useState("");
+    const [quizDesc, setquizDesc] = useState("");
+    const [quizPoints, setquizPoints] = useState("");
+    const [quizDue, setquizDue] = useState("");
+    const [quizFrom, setquizFrom] = useState("");
+    
+    const createquizForCourse = async () => {
         if (!cid) return;
-        const newAssignment = { 
-            title: assignmentName,
-            description: assignmentDesc,
-            points: assignmentPoints,
-            due_date_num: assignmentDue,
-            available_date_num: assignmentFrom,
+        const newquiz = { 
+            title: quizName,
+            description: quizDesc,
+            points: quizPoints,
+            due_date_num: quizDue,
+            available_date_num: quizFrom,
             course: cid 
         };
-        const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
-        // dispatch(addAssignment(assignment));
+        // const quiz = await coursesClient.createquizForCourse(cid, newquiz);
+        // dispatch(addquiz(quiz));
     };
     
-    const saveAssignment = async () => {
-        const updatedAssignment = { 
-            _id: aid,
-            title: assignmentName,
-            description: assignmentDesc,
-            points: assignmentPoints,
-            due_date_num: assignmentDue,
-            available_date_num: assignmentFrom,
+    const savequiz = async () => {
+        const updatedquiz = { 
+            _id: qid,
+            title: quizName,
+            description: quizDesc,
+            points: quizPoints,
+            due_date_num: quizDue,
+            available_date_num: quizFrom,
             course: cid 
         };
-        // await assignmentsClient.updateAssignment(updatedAssignment);
-        // dispatch(updateAssignment(updatedAssignment));
+        // await quizzesClient.updatequiz(updatedquiz);
+        // dispatch(updatequiz(updatedquiz));
     };
     
     
     useEffect(() => {
-        if(aid !== "new"){
-            setAssignmentName(assignment.title);
-            setAssignmentDesc(assignment.description);
-            setAssignmentPoints(assignment.points);
-            setAssignmentFrom(assignment.available_date_num);
-            setAssignmentDue(assignment.due_date_num);
+        if(qid !== "new"){
+            setquizName(quiz.title);
+            setquizDesc(quiz.description);
+            setquizPoints(quiz.points);
+            setquizFrom(quiz.available_date_num);
+            setquizDue(quiz.due_date_num);
         }
-    }, [assignment]);
+    }, [quiz]);
 
     const dispatch = useDispatch();
 
     return (
-      <div id="wd-assignments-editor">
-        <label htmlFor="wd-name"><h5>Assignment Name</h5></label>
+      <div id="wd-quizzes-editor">
+        <label htmlFor="wd-name"><h5>Quiz Name</h5></label>
         
                     <div className="input-group mb-4">
-                        <input id="wd-name" className="form-control" defaultValue={assignmentName}
-                            onChange={(e) => setAssignmentName(e.target.value)} />
+                        <input id="wd-name" className="form-control" defaultValue={quizName}
+                            onChange={(e) => setquizName(e.target.value)} />
                     </div>
                 
         
                 <div className="input-group mb-4">
-                    <textarea id="wd-description" className="form-control" defaultValue={assignmentDesc}
-                        onChange={(e) => setAssignmentDesc(e.target.value)} />
+                    <textarea id="wd-description" className="form-control" defaultValue={quizDesc}
+                        onChange={(e) => setquizDesc(e.target.value)} />
                 </div>
                 
         
@@ -84,21 +84,21 @@ export default function QuizEditor() {
                                 Points 
                             </label>
                             <div className="col-sm-9">
-                                <input id="wd-points" className="form-control" defaultValue={assignmentPoints} 
-                                    onChange={(e) => setAssignmentPoints(e.target.value)}/>
+                                <input id="wd-points" className="form-control" defaultValue={quizPoints} 
+                                    onChange={(e) => setquizPoints(e.target.value)}/>
                             </div> 
                         </div>
 
-                        {(aid !== "new") ? (
+                        {(qid !== "new") ? (
                         <div>
                         <div className="row mb-3">
                             <label htmlFor="wd-group" className="text-end col-sm-3 col-form-label">
-                                Assignment Group
+                                quiz Group
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select">
-                                    <option selected value="Publish All">Assignment</option>
-                                    <option value="Publish Selected">Non-Assignment</option>
+                                    <option selected value="Publish All">quiz</option>
+                                    <option value="Publish Selected">Non-quiz</option>
                                 </select>
                             </div>
                         </div>
@@ -162,7 +162,7 @@ export default function QuizEditor() {
                                 Assign
                             </label>
                             <div className="col-sm-9 border">
-                                {(aid !== "new") ? (
+                                {(qid !== "new") ? (
                                 <div>
                                 <label htmlFor="wd-assign-to" className="mt-3">
                                     <h5>Assign to</h5>
@@ -173,8 +173,8 @@ export default function QuizEditor() {
                                 <label id="wd-due-date" htmlFor="wd-assign-to"> Due </label>
                                 <input className="form-control mb-4" type="date"
                                     id="wd-due-date"
-                                    defaultValue={assignmentDue}
-                                    onChange={(e) => setAssignmentDue(e.target.value)}/>
+                                    defaultValue={quizDue}
+                                    onChange={(e) => setquizDue(e.target.value)}/>
                                 <div className="d-flex mb-4">
                                     <div className="flex-fill">
                                         <label htmlFor="wd-available-from">
@@ -182,8 +182,8 @@ export default function QuizEditor() {
                                         </label>
                                         <div><input className="form-control" type="date"
                                             id="wd-available-from"
-                                            defaultValue={assignmentFrom}
-                                            onChange={(e) => setAssignmentFrom(e.target.value)}/>
+                                            defaultValue={quizFrom}
+                                            onChange={(e) => setquizFrom(e.target.value)}/>
                                         </div>
                                     </div>
 
@@ -192,7 +192,7 @@ export default function QuizEditor() {
                                         <div>
                                         <input className="form-control" type="date"
                                             id="wd-available-until"
-                                            defaultValue={assignmentDue}/>
+                                            defaultValue={quizDue}/>
                                         </div>
                                     </div>
                                 </div>
@@ -210,13 +210,15 @@ export default function QuizEditor() {
                     </button>
                 </Link>
                 <Link to="./..">
-                    {(aid !== "new") ? (
-                        <button className="btn btn-danger" onClick={saveAssignment}
-                            id={`wd-update-${aid}-click`}>
+                    {(qid !== "new") ? (
+                        <button className="btn btn-danger" 
+                            // onClick={savequiz}
+                            id={`wd-update-${qid}-click`}>
                             Save
                         </button>) : (
-                        <button className="btn btn-danger" onClick={createAssignmentForCourse}
-                            id={`wd-update-${aid}-click`}>
+                        <button className="btn btn-danger" 
+                            // onClick={createquizForCourse}
+                            id={`wd-update-${qid}-click`}>
                             Save
                         </button>)
                     }

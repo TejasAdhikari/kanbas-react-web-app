@@ -14,12 +14,9 @@ export default function QuizControls() {
           <a className="wd-new-assignment-link btn btn-lg btn-danger me-1 float-end justify-content-end"
             href={`#/Kanbas/Courses/${cid}/Assignments/new`}>
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-                Assignment
+                Quiz
           </a>
-          <button id="wd-add-group-btn" className="btn btn-lg btn-secondary me-1 float-end justify-content-end">
-            <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-            Group
-          </button>
+
           <div id="wd-search-box" className="border justify-content-start">
             <span >
               <CiSearch className="me-1 fs-3"/> 
