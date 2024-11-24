@@ -18,21 +18,28 @@ export default function Kanbas() {
   const [courses, setCourses] = useState<any[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const fetchCourses = async () => {
-    let courses = [];
     try {
-      courses = await userClient.findMyCourses();
+      const courses = await courseClient.fetchAllCourses();
+      setCourses(courses);
     } catch (error) {
       console.error(error);
     }
-    setCourses(courses);
+ 
+    // let courses = [];
+    // try {
+    //   courses = await userClient.findMyCourses();
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    // setCourses(courses);
 
-    let allCourses = [];
-    try {
-      allCourses = await courseClient.fetchAllCourses();
-    } catch (error) {
-      console.error(error);
-    }
-    setAllCourses(allCourses);
+    // let allCourses = [];
+    // try {
+    //   allCourses = await courseClient.fetchAllCourses();
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    // setAllCourses(allCourses);
   };
   
   useEffect(() => {
@@ -46,7 +53,7 @@ export default function Kanbas() {
     startDate: "2023-09-10", endDate: "2023-12-15", description: "New Description",
   });
   const addNewCourse = async () => {
-    const newCourse = await userClient.createCourse(course);
+    const newCourse = await courseClient.createCourse(course);
     setCourses([...courses, newCourse]);
   };
   const deleteCourse = async (courseId: any) => {
@@ -54,7 +61,7 @@ export default function Kanbas() {
     setCourses(courses.filter((course) => course._id !== courseId));
   };
   const updateCourse = async () => {
-    await courseClient.updateCourse(course);
+    const status = await courseClient.updateCourse(course);
     setCourses(courses.map((c) => {
         if (c._id === course._id) {
           return course;

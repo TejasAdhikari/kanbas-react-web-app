@@ -19,9 +19,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
     const [showAllCourses, setShowAllCourses] = useState(false);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     // const { enrollments } = useSelector((state: any) => state.enrollmentReducer); 
-        
-    // console.log(typeof enrollments);
-    
+            
     // const enrolledCourses = courses.filter((course: any) => enrollments.some(
     //     (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === course._id
     //   ));
@@ -87,7 +85,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
         <h2 id="wd-dashboard-published">Published Courses ({displayedCourses.length})</h2> <hr />
         <div id="wd-dashboard-courses" className="row">
             <div className="row row-cols-1 row-cols-md-5 g-4">
-            {displayedCourses.map((course) => (
+            {courses.map((course) => (
                 <div className="wd-dashboard-course col" style={{ width: "270px" }}>
                 <div className="card rounded-3 overflow-hidden">
                     <Link to={courses.some(
