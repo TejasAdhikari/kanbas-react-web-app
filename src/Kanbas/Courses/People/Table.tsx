@@ -8,15 +8,21 @@ import ProtectedEdit from "../../Account/ProtectedEdit";
 import PeopleControls from "./PeopleControls";
 import { FaTrash } from "react-icons/fa6";
 import PeopleDetails from "./Details";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import * as courseClient from "../client";
 
 export default function PeopleTable ({ users = [] }: { users?: any[] }) {
-  // const { cid } = useParams();
+  const { cid } = useParams();
   // const { users, enrollments } = db;
   // const { enrollments } = useSelector((state: any) => state.peopleReducer);
   const [personId, setPersonId] = useState("");
 
   const dispatch = useDispatch();
+
+  // const fetchUsers = async () => {
+  //   const users = await courseClient.findUsersForCourse(cid);
+  //   setUsers(users);
+  // };
 
   // const fetchPeople = async () => {
   //   const people = await client.fetchAllPeople(cid as string);

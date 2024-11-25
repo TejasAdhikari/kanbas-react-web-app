@@ -8,13 +8,15 @@ import ProtectedRouteStudent from "./Account/ProtectedRouteStudent";
 import * as enrollmentClient from "./enrollmentClient";
 
 export default function Dashboard({ courses, setCourses, allCourses, setAllCourses,
-        course, setCourse, addNewCourse, deleteCourse, updateCourse }: {
+        course, setCourse, addNewCourse, deleteCourse, updateCourse, enrolling, setEnrolling , updateEnrollment  }: {
         courses: any[]; allCourses: any[]; course: any; 
         setCourses: (courses: any) => void; 
         setAllCourses: (allCourses: any) => void;
         setCourse: (course: any) => void;
         addNewCourse: () => void; deleteCourse: (course: any) => void;
-        updateCourse: () => void; }) {
+        updateCourse: () => void; 
+        enrolling: boolean; setEnrolling: (enrolling: boolean) => void;
+        updateEnrollment: (courseId: string, enrolled: boolean) => void}) {
     
     const [showAllCourses, setShowAllCourses] = useState(false);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -34,34 +36,38 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
     }, []);
     
 
-    const enrollUserInCourse = async (courseId: any) => {
-        console.log(currentUser._id);
-        const newCourses = await enrollmentClient.enrollInCourse(currentUser._id, courseId);
-        // console.log("Dashboard courses response: ", newCourses);
-        dispatch(enrollCourse({user: currentUser._id, course: courseId}));
-        setCourses(newCourses);
-    };
+    // const enrollUserInCourse = async (courseId: any) => {
+    //     console.log(currentUser._id);
+    //     const newCourses = await enrollmentClient.enrollInCourse(currentUser._id, courseId);
+    //     // console.log("Dashboard courses response: ", newCourses);
+    //     dispatch(enrollCourse({user: currentUser._id, course: courseId}));
+    //     setCourses(newCourses);
+    // };
 
-    const unEnrollUseFromCourse = async (courseId: any) => {
-        console.log(currentUser._id);
-        const newCourses = await enrollmentClient.unEnrollFromCourse(currentUser._id, courseId);
-        // console.log("Dashboard courses response: ", newCourses);
-        dispatch(unenrollCourse({user: currentUser._id, course: courseId}));
-        setCourses(newCourses);
-    };
+    // const unEnrollUseFromCourse = async (courseId: any) => {
+    //     console.log(currentUser._id);
+    //     const newCourses = await enrollmentClient.unEnrollFromCourse(currentUser._id, courseId);
+    //     // console.log("Dashboard courses response: ", newCourses);
+    //     dispatch(unenrollCourse({user: currentUser._id, course: courseId}));
+    //     setCourses(newCourses);
+    // };
     
-    const displayedCourses = showAllCourses ? allCourses : courses;
+    // const displayedCourses = showAllCourses ? allCourses : courses;
     // const displayedCourses = courses;
     return (
         <div id="wd-dashboard">
-        <h1 id="wd-dashboard-title">Dashboard
-            <ProtectedRouteStudent>
-                <button className="btn btn-primary float-end"
+        <h1 id="wd-dashboard-title">
+            Dashboard
+            {/* <ProtectedRouteStudent> */}
+                <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" >
+                    {enrolling ? "My Courses" : "All Courses"}
+                </button>
+                {/* <button className="btn btn-primary float-end"
                 id="wd-enrollments-click" 
                 onClick={() => setShowAllCourses(!showAllCourses)}>
                   {showAllCourses ? "Back" : "Enrollments"}
-                </button>
-            </ProtectedRouteStudent>
+                </button> */}
+            {/* </ProtectedRouteStudent> */}
         </h1> 
         
         <hr />
@@ -82,7 +88,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
             <hr />
         </ProtectedEdit>
         
-        <h2 id="wd-dashboard-published">Published Courses ({displayedCourses.length})</h2> <hr />
+        <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
         <div id="wd-dashboard-courses" className="row">
             <div className="row row-cols-1 row-cols-md-5 g-4">
             {courses.map((course) => (
@@ -101,7 +107,16 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
                         />
                         <div className="card-body">
                             <h5 className="wd-dashboard-course-title card-title">
-                            {course.name}
+                                {enrolling && (
+                                    <button onClick={(event) => {
+                                            event.preventDefault();
+                                            updateEnrollment(course._id, !course.enrolled);
+                                        }}
+                                        className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} >
+                                        {course.enrolled ? "Unenroll" : "Enroll"}
+                                    </button>
+                                )}
+                                {course.name}
                             </h5>
                             <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
                             {course.description}
@@ -126,7 +141,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
                                 </button>
                             </ProtectedEdit>
 
-                            <ProtectedRouteStudent>
+                            {/* <ProtectedRouteStudent>
                                 {courses.some(
                                     (c: any) =>
                                         c._id === course._id ) ? (
@@ -157,7 +172,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
                                         Enroll
                                     </button>
                                 )}
-                            </ProtectedRouteStudent>
+                            </ProtectedRouteStudent> */}
                         </div>
                     </Link>
                 </div>
