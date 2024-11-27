@@ -6,11 +6,12 @@ import QuizControlButtons from "./QuizControlButtons";
 import AssignmentControls from "./QuizControls";
 import { useParams, useLocation } from "react-router";
 import ProtectedEdit from "../../Account/ProtectedEdit";
-import { setQuizzes } from "./reducer";
+import { setQuizzes, deleteQuiz } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../client";
 import QuizControls from "./QuizControls";
 import { MdOutlineQuiz } from "react-icons/md";
+import * as quizzesClient from "./client"; 
 
 
 export default function Quizzes() {
@@ -25,10 +26,10 @@ export default function Quizzes() {
     dispatch(setQuizzes(quizzes));
   };
 
-  // const removeAssignment = async (assignmentId: string) => {
-  //   await assignmentsClient.deleteAssignment(assignmentId);
-  //   dispatch(deleteAssignment(assignmentId));
-  // };
+  const removeQuiz = async (quizId: string) => {
+    await quizzesClient.deleteQuiz(quizId);
+    dispatch(deleteQuiz(quizId));
+  };
 
   useEffect(() => {
     fetchQuizzes();
@@ -74,9 +75,9 @@ export default function Quizzes() {
                           </div>  
                         </div>
                         <div className="align-self-center">
-                          {/* <SingleQuizControlButton 
-                            assignmentId={assignment._id}
-                            deleteAssignment={(assignmentId) => removeAssignment(assignmentId)}/> */}
+                          <SingleQuizControlButton 
+                            quizId={quiz._id}
+                            deleteQuiz={(quizId) => removeQuiz(quizId)}/>
                         </div>
                       </div>
                   </li>

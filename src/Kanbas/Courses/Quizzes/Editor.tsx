@@ -2,7 +2,7 @@ import { Link, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as db from "../../Database"
 import ProtectedEdit from "../../Account/ProtectedEdit";
-// import { addquiz, updatequiz } from "./reducer";
+import { addQuiz, updateQuiz } from "./reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import * as coursesClient from "../client";
 import * as quizzesClient from "./client";
@@ -18,7 +18,8 @@ export default function QuizEditor() {
     const [quizPoints, setquizPoints] = useState("");
     const [quizDue, setquizDue] = useState("");
     const [quizFrom, setquizFrom] = useState("");
-    
+
+
     const createquizForCourse = async () => {
         if (!cid) return;
         const newquiz = { 
@@ -29,8 +30,8 @@ export default function QuizEditor() {
             available_date_num: quizFrom,
             course: cid 
         };
-        // const quiz = await coursesClient.createquizForCourse(cid, newquiz);
-        // dispatch(addquiz(quiz));
+        const quiz = await coursesClient.createQuizForCourse(cid, newquiz);
+        dispatch(addQuiz(quiz));
     };
     
     const savequiz = async () => {
@@ -43,8 +44,8 @@ export default function QuizEditor() {
             available_date_num: quizFrom,
             course: cid 
         };
-        // await quizzesClient.updatequiz(updatedquiz);
-        // dispatch(updatequiz(updatedquiz));
+        await quizzesClient.updateQuiz(updatedquiz);
+        dispatch(updateQuiz(updatedquiz));
     };
     
     
@@ -212,12 +213,12 @@ export default function QuizEditor() {
                 <Link to="./..">
                     {(qid !== "new") ? (
                         <button className="btn btn-danger" 
-                            // onClick={savequiz}
+                            onClick={savequiz}
                             id={`wd-update-${qid}-click`}>
                             Save
                         </button>) : (
                         <button className="btn btn-danger" 
-                            // onClick={createquizForCourse}
+                            onClick={createquizForCourse}
                             id={`wd-update-${qid}-click`}>
                             Save
                         </button>)
