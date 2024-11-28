@@ -19,8 +19,17 @@ export default function QuizDetailsEditor() {
     const [quizDue, setquizDue] = useState("");
     const [quizFrom, setquizFrom] = useState("");
     const [quizUntil, setquizUntil] = useState("");
-    const [quizType, setQuizType] = useState("");
-
+    const [quizPublished, setquizPublished] = useState("");
+    const [quizType, setquizType] = useState("");
+    const [quizAssGrp, setquizAssGrp] = useState("");
+    const [quizShuffle, setquizShuffle] = useState("");
+    const [quizTimeLimit, setquizTimeLimit] = useState("");
+    const [quizMultiple, setquizMultiple] = useState("");
+    const [quizShowCorrAns, setquizShowCorrAns] = useState("");
+    const [quizAccessCode, setquizAccessCode] = useState("");
+    const [quizOneQues, setquizOneQues] = useState("");
+    const [quizWebCam, setquizWebCam] = useState("");
+    const [quizLockQuesAns, setquizLockQuesAns] = useState("");
 
     const createquizForCourse = async () => {
         if (!cid) return;
@@ -47,7 +56,17 @@ export default function QuizDetailsEditor() {
             due_date_num: quizDue,
             available_date_num: quizFrom,
             until_date_num: quizUntil,
-            course: cid 
+            assignmentGroup: quizAssGrp,
+            shuffleAnswers: (quizShuffle === "Yes" ? true : false),
+            timeLimit: quizTimeLimit,
+            multipleAttempts: (quizMultiple === "Yes" ? true : false),
+            // numberAttempts: Number,
+            showCorrectAnswers: quizShowCorrAns,
+            accessCode: quizAccessCode,
+            oneQuestionAtATime: (quizOneQues === "Yes" ? true : false),
+            webcamRequired: (quizWebCam === "Yes" ? true : false),
+            lockQuestionsAfterAnswering: (quizLockQuesAns === "Yes" ? true : false),
+            course: cid
         };
         await quizzesClient.updateQuiz(updatedquiz);
         dispatch(updateQuiz(updatedquiz));
@@ -64,6 +83,16 @@ export default function QuizDetailsEditor() {
             due_date_num: quizDue,
             available_date_num: quizFrom,
             until_date_num: quizUntil,
+            assignmentGroup: quizAssGrp,
+            shuffleAnswers: (quizShuffle === "Yes"  ? true : false),
+            timeLimit: quizTimeLimit,
+            multipleAttempts: (quizMultiple === "Yes" ? true : false),
+            // numberAttempts: Number,
+            showCorrectAnswers: quizShowCorrAns,
+            accessCode: quizAccessCode,
+            oneQuestionAtATime: (quizOneQues === "Yes" ? true : false),
+            webcamRequired: (quizWebCam === "Yes" ? true : false),
+            lockQuestionsAfterAnswering: (quizLockQuesAns === "Yes" ? true : false),
             course: cid 
         };
         await quizzesClient.updateQuiz(updatedquiz);
@@ -76,10 +105,20 @@ export default function QuizDetailsEditor() {
             setquizName(quiz.title);
             setquizDesc(quiz.description);
             setquizPoints(quiz.points);
-            setQuizType(quiz.quizType);
+            setquizType(quiz.quizType);
             setquizFrom(quiz.available_date_num);
             setquizDue(quiz.due_date_num);
             setquizUntil(quiz.until_date_num);
+            setquizAssGrp(quiz.assignmentGroup),
+            setquizShuffle(quiz.shuffleAnswers),
+            setquizTimeLimit(quiz.timeLimit),
+            setquizMultiple(quiz.multipleAttempts),
+            // numberAttempts: Number,
+            setquizShowCorrAns(quiz.showCorrectAnswers),
+            setquizAccessCode(quiz.accessCode),
+            setquizOneQues(quiz.oneQuestionAtATime),
+            setquizWebCam(quiz.webcamRequired),
+            setquizLockQuesAns(quiz.lockQuestionsAfterAnswering)
         }
     }, [quiz]);
 
@@ -126,7 +165,8 @@ export default function QuizDetailsEditor() {
                                 Quiz Type
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizType(e.target.value)}>
                                     <option selected value="Publish All">Graded Quiz</option>
                                     <option value="Publish Selected">Practice Quiz</option>
                                     <option value="Publish All">Graded Survey</option>
@@ -139,7 +179,8 @@ export default function QuizDetailsEditor() {
                                 Assignment Group
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizAssGrp(e.target.value)}>
                                     <option selected value="Publish All">Quizzes </option>
                                     <option value="Publish Selected">Exams</option>
                                     <option value="Publish Selected">Assignments</option>
@@ -152,7 +193,8 @@ export default function QuizDetailsEditor() {
                             Shuffle Answers
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizShuffle(e.target.value)}>
                                     <option selected value="Publish All">Yes </option>
                                     <option value="Publish Selected">No</option>
                                 </select>
@@ -163,8 +205,8 @@ export default function QuizDetailsEditor() {
                                 Time Limit 
                             </label>
                             <div className="col-sm-9">
-                                <input id="wd-time-limit" className="form-control" type="number" defaultValue={quizPoints} 
-                                    onChange={(e) => setquizPoints(e.target.value)}/>
+                                <input id="wd-time-limit" className="form-control" type="number" defaultValue={quizTimeLimit} 
+                                    onChange={(e) => setquizTimeLimit(e.target.value)}/>
                             </div> 
                         </div>
                         <div className="row mb-3">
@@ -172,7 +214,8 @@ export default function QuizDetailsEditor() {
                             Multiple Attempts
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizMultiple(e.target.value)}>
                                     <option selected value="Publish All">No </option>
                                     <option value="Publish Selected">Yes</option>
                                 </select>
@@ -183,7 +226,8 @@ export default function QuizDetailsEditor() {
                             Show Correct Answers
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizShowCorrAns(e.target.value)}>
                                     <option selected value="Publish All">Immediately </option>
                                     <option value="Publish Selected">Late</option>
                                 </select>
@@ -194,8 +238,8 @@ export default function QuizDetailsEditor() {
                                 Access Code 
                             </label>
                             <div className="col-sm-9">
-                                <input id="wd-points" className="form-control" defaultValue={quizPoints} 
-                                    onChange={(e) => setquizPoints(e.target.value)}/>
+                                <input id="wd-points" className="form-control" defaultValue={quizAccessCode} 
+                                    onChange={(e) => setquizAccessCode(e.target.value)}/>
                             </div> 
                         </div>
                         <div className="row mb-3">
@@ -203,7 +247,8 @@ export default function QuizDetailsEditor() {
                             One Question at a Time
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizOneQues(e.target.value)}>
                                     <option selected value="Publish All">Yes </option>
                                     <option value="Publish Selected">No</option>
                                 </select>
@@ -214,7 +259,8 @@ export default function QuizDetailsEditor() {
                             Webcam Required
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizWebCam(e.target.value)}>
                                     <option selected value="Publish All">Yes </option>
                                     <option value="Publish Selected">No</option>
                                 </select>
@@ -225,7 +271,8 @@ export default function QuizDetailsEditor() {
                             Lock Questions After Answering
                             </label>
                             <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
+                                <select id="wd-group" className="form-select"
+                                    onChange={(e) => setquizLockQuesAns(e.target.value)}>
                                     <option selected value="Publish All">Yes </option>
                                     <option value="Publish Selected">No</option>
                                 </select>
