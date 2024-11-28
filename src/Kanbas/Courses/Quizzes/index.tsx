@@ -19,6 +19,14 @@ export default function Quizzes() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
 
+  // var today = new Date();
+  // var dd = String(today.getDate()).padStart(2, '0');
+  // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  // var yyyy = today.getFullYear();
+  // var currDate = yyyy + '-' + dd + '-' + mm;
+  const today = new Date();
+  const currDate = today.toISOString().split("T")[0];
+
   const dispatch = useDispatch();
 
   const fetchQuizzes = async () => {
@@ -60,22 +68,30 @@ export default function Quizzes() {
                         </div>
                         <div className="align-self-center flex-grow-1">
                           <a className="wd-assignment-link"
-                            href={currentUser.role === "FACULTY" ? `#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`
-                              : `#/Kanbas/Courses/${cid}/Quizzes/`}>
+                            href={`#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}>
                             {quiz.title}
                           </a><br />
-                          <div className="wd-float-left text-danger me-1">
-                            Multiple module 
-                          </div>
-                          <div className="wd-float-left me-1"> 
-                            | <b>Not available until</b> {quiz.available_date_num} at 12:00 am | <br /> 
-                          </div >
+                          {/* <div className="wd-float-left text-danger me-1">
+                            Multiple module | 
+                          </div> */}
+                          {new Date(quiz.due_date_num) >= new Date(currDate) ? 
+                            new Date(quiz.available_date_num) > new Date(currDate) ?
+                            <div className="wd-float-left me-1"> 
+                              <b>Not available until</b> {quiz.available_date_num} at 12:00 am | <br /> 
+                            </div > : <div className="wd-float-left me-1"> 
+                                        <b>Available</b> | <br /> 
+                                      </div > 
+                            : <div className="wd-float-left me-1"> 
+                                <b>Closed</b> | <br /> 
+                              </div >
+                          }
                           <div className="wd-float-left me-1">
-                            <b>Due</b> {quiz.due_date_num} at 11:59pm | {quiz.points} pts
+                            <b>Due</b> {quiz.due_date_num} at 11:59pm | {quiz.points} pts | Questions | Score
                           </div>  
                         </div>
                         <div className="align-self-center">
                           <SingleQuizControlButton 
+                            quiz = {quiz}
                             quizId={quiz._id}
                             deleteQuiz={(quizId) => removeQuiz(quizId)}/>
                         </div>

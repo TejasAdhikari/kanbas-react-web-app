@@ -1,4 +1,4 @@
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as db from "../../Database"
 import ProtectedEdit from "../../Account/ProtectedEdit";
@@ -6,6 +6,9 @@ import { addQuiz, updateQuiz } from "./reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import * as coursesClient from "../client";
 import * as quizzesClient from "./client";
+import TOC from "./TOC";
+import QuizDetailsEditor from "./DetailsEditor";
+import QuizQuestionsEditor from "./QuestionsEditor";
 
 export default function QuizEditor() {
     const { cid, qid } = useParams();
@@ -18,6 +21,7 @@ export default function QuizEditor() {
     const [quizPoints, setquizPoints] = useState("");
     const [quizDue, setquizDue] = useState("");
     const [quizFrom, setquizFrom] = useState("");
+    const [quizUntil, setquizUntil] = useState("");
 
 
     const createquizForCourse = async () => {
@@ -28,6 +32,7 @@ export default function QuizEditor() {
             points: quizPoints,
             due_date_num: quizDue,
             available_date_num: quizFrom,
+            until_date_num: quizUntil,
             course: cid 
         };
         const quiz = await coursesClient.createQuizForCourse(cid, newquiz);
@@ -36,12 +41,13 @@ export default function QuizEditor() {
     
     const savequiz = async () => {
         const updatedquiz = { 
-            _id: qid,
+            ...quiz,
             title: quizName,
             description: quizDesc,
             points: quizPoints,
             due_date_num: quizDue,
             available_date_num: quizFrom,
+            until_date_num: quizUntil,
             course: cid 
         };
         await quizzesClient.updateQuiz(updatedquiz);
@@ -56,6 +62,7 @@ export default function QuizEditor() {
             setquizPoints(quiz.points);
             setquizFrom(quiz.available_date_num);
             setquizDue(quiz.due_date_num);
+            setquizUntil(quiz.until_date_num);
         }
     }, [quiz]);
 
@@ -63,7 +70,14 @@ export default function QuizEditor() {
 
     return (
       <div id="wd-quizzes-editor">
-        <label htmlFor="wd-name"><h5>Quiz Name</h5></label>
+        {(qid !== "new") ? 
+            <div><TOC />
+            <Routes>
+                <Route path="details" element={<QuizDetailsEditor />} />
+                <Route path="questions" element={<QuizQuestionsEditor />} />
+            </Routes> </div> :
+        <div>
+            <label htmlFor="wd-name"><h5>Quiz Name</h5></label>
         
                     <div className="input-group mb-4">
                         <input id="wd-name" className="form-control" defaultValue={quizName}
@@ -193,7 +207,8 @@ export default function QuizEditor() {
                                         <div>
                                         <input className="form-control" type="date"
                                             id="wd-available-until"
-                                            defaultValue={quizDue}/>
+                                            defaultValue={quizUntil}
+                                            onChange={(e) => setquizUntil(e.target.value)}/>
                                         </div>
                                     </div>
                                 </div>
@@ -204,27 +219,30 @@ export default function QuizEditor() {
         <hr />
         
         <ProtectedEdit>
-            <div className="d-flex justify-content-end">
-                <Link to="./..">
-                    <button className="btn btn-secondary me-1">
-                        Cancel
-                    </button>
-                </Link>
-                <Link to="./..">
-                    {(qid !== "new") ? (
+            <div className="d-flex justify-content-end">  
+                {(qid !== "new") ? (
+                    <Link to="./..">
+                        <button className="btn btn-secondary me-1">
+                            Cancel
+                        </button>
                         <button className="btn btn-danger" 
                             onClick={savequiz}
                             id={`wd-update-${qid}-click`}>
                             Save
-                        </button>) : (
+                        </button> 
+                    </Link>) : (
+                    <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
+                        <button className="btn btn-secondary me-1">
+                            Cancel
+                        </button>
                         <button className="btn btn-danger" 
                             onClick={createquizForCourse}
                             id={`wd-update-${qid}-click`}>
                             Save
-                        </button>)
-                    }
-                </Link>
+                        </button> 
+                    </a>)
+                }
             </div>
-        </ProtectedEdit>
+        </ProtectedEdit> </div>}
     </div>
 );}

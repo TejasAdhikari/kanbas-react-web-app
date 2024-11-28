@@ -12,7 +12,7 @@ export default function QuizControls() {
     <div id="wd-assigment-controls" className="text-nowrap">
         <div className="flex" >
           <a className="wd-new-assignment-link btn btn-lg btn-danger me-1 float-end justify-content-end"
-            href={`#/Kanbas/Courses/${cid}/Quizzes/new`}>
+            href={`#/Kanbas/Courses/${cid}/Quizzes/new/editor`}>
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                 Quiz
           </a>
