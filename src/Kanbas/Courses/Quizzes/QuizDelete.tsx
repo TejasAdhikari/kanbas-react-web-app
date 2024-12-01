@@ -13,7 +13,7 @@ export default function QuizDelete({ dialogTitle, quizId, deleteQuiz}:{
                 </div>
                 <div className="modal-body">
                     
-                    <h5>Are you sure you want to remove the assignment?</h5>
+                    <h5>Are you sure you want to remove the quiz?</h5>
                     
                 </div>  
 

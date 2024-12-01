@@ -8,7 +8,7 @@ import * as coursesClient from "../client";
 import * as quizzesClient from "./client";
 import TOC from "./TOC";
 import QuizDetailsEditor from "./DetailsEditor";
-import QuizQuestionsEditor from "./QuestionsEditor";
+import QuizQuestionsEditor from "./Questions";
 
 export default function QuizEditor() {
     const { cid, qid } = useParams();
@@ -77,24 +77,16 @@ export default function QuizEditor() {
                 <Route path="questions" element={<QuizQuestionsEditor />} />
             </Routes> </div> :
         <div>
-            <label htmlFor="wd-name"><h5>Quiz Name</h5></label>
-        
-                    <div className="input-group mb-4">
-                        <input id="wd-name" className="form-control" defaultValue={quizName}
-                            onChange={(e) => setquizName(e.target.value)} />
-                    </div>
-                
+            <label htmlFor="wd-name">Quiz Name</label>
         
                 <div className="input-group mb-4">
-                    <textarea id="wd-description" className="form-control" defaultValue={quizDesc}
-                        onChange={(e) => setquizDesc(e.target.value)} />
+                    <input id="wd-name" className="form-control" defaultValue={quizName}
+                        onChange={(e) => setquizName(e.target.value)} />
                 </div>
-                
-        
-        
+
                 <div id="wd-css-responsive-forms-2">
                     <form>
-                        <div className="row mb-3">
+                        {/* <div className="row mb-3">
                             <label htmlFor="wd-points" className="text-end col-sm-3 col-form-label">
                                 Points 
                             </label>
@@ -102,89 +94,14 @@ export default function QuizEditor() {
                                 <input id="wd-points" className="form-control" defaultValue={quizPoints} 
                                     onChange={(e) => setquizPoints(e.target.value)}/>
                             </div> 
-                        </div>
-
-                        {(qid !== "new") ? (
-                        <div>
-                        <div className="row mb-3">
-                            <label htmlFor="wd-group" className="text-end col-sm-3 col-form-label">
-                                quiz Group
-                            </label>
-                            <div className="col-sm-9">
-                                <select id="wd-group" className="form-select">
-                                    <option selected value="Publish All">quiz</option>
-                                    <option value="Publish Selected">Non-quiz</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="row mb-3">
-                            <label id="wd-display-grade-as" htmlFor="wd-group" 
-                            className="text-end col-sm-3 col-form-label">
-                                Display Grade as
-                            </label>
-                            <div className="col-sm-9">
-                                <select id="wd-display-grade-as" className="form-select">
-                                    <option selected value="Publish All">Percentage</option>
-                                    <option value="Publish Selected">GPA</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="row mb-3">
-                            <label id="wd-submission-type" htmlFor="wd-group" 
-                            className="text-end col-sm-3 col-form-label">
-                                Submission Type
-                            </label>
-                            <div className="col-sm-9 border">
-                                <select id="wd-submission-type" className="form-select mt-3 mb-3">
-                                    <option selected value="Publish All">Online</option>
-                                    <option value="Publish Selected">Offline</option>
-                                </select>
-                                <h5>Online entry options</h5>
-                                <div className="form-check">
-                                    <input className="form-check-input mt-2" type="checkbox" name="check-genre" id="wd-chkbox-comedy"/>
-                                    <label className="form-check-label mt-2" id ="wd-text-entry" htmlFor="wd-text-entry">
-                                        Text Entry
-                                    </label><br/>
-
-                                    <input className="form-check-input mt-2" type="checkbox" name="check-genre" id="wd-chkbox-drama"/>
-                                    <label className="form-check-label mt-2" id="wd-website-url" htmlFor="wd-website-url">
-                                        Website URL
-                                    </label><br/>
-
-                                    <input className="form-check-input mt-2" type="checkbox" name="check-genre" id="wd-chkbox-scifi"/>
-                                    <label className="form-check-label mt-2" id="wd-media-recordings" htmlFor="wd-media-recordings">
-                                        Media Recordings
-                                    </label><br/>
-
-                                    <input className="form-check-input mt-2" type="checkbox" name="check-genre" id="wd-chkbox-fantasy"/>
-                                    <label className="form-check-label mt-2"id="wd-student-annotation" htmlFor="wd-student-annotation">
-                                        Student Annotation
-                                    </label><br />
-
-                                    <input className="form-check-input mt-2" type="checkbox" name="check-genre" id="wd-chkbox-fantasy"/>
-                                    <label className="form-check-label mt-2 mb-4" id="wd-file-upload" htmlFor="wd-file-upload">
-                                        File Uploads
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        </div>) : (<div></div>)}
-
+                        </div> */}
 
                         <div className="row mb-3">
                             <label id="wd-assign" htmlFor="wd-assign" 
-                            className="text-end col-sm-3 col-form-label">
+                            className="text-end col-sm-1 col-form-label">
                                 Assign
                             </label>
-                            <div className="col-sm-9 border">
-                                {(qid !== "new") ? (
-                                <div>
-                                <label htmlFor="wd-assign-to" className="mt-3">
-                                    <h5>Assign to</h5>
-                                </label>
-                                <input className="form-control mb-4" id="wd-assign-to" value={"Everyone"} />
-                                </div>) : (<div> </div>)}
-
+                            <div className="col-sm-7 border">
                                 <label id="wd-due-date" htmlFor="wd-assign-to"> Due </label>
                                 <input className="form-control mb-4" type="date"
                                     id="wd-due-date"
@@ -220,28 +137,16 @@ export default function QuizEditor() {
         
         <ProtectedEdit>
             <div className="d-flex justify-content-end">  
-                {(qid !== "new") ? (
-                    <Link to="./..">
-                        <button className="btn btn-secondary me-1">
-                            Cancel
-                        </button>
-                        <button className="btn btn-danger" 
-                            onClick={savequiz}
-                            id={`wd-update-${qid}-click`}>
-                            Save
-                        </button> 
-                    </Link>) : (
-                    <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
-                        <button className="btn btn-secondary me-1">
-                            Cancel
-                        </button>
-                        <button className="btn btn-danger" 
-                            onClick={createquizForCourse}
-                            id={`wd-update-${qid}-click`}>
-                            Save
-                        </button> 
-                    </a>)
-                }
+                <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
+                    <button className="btn btn-secondary me-1">
+                        Cancel
+                    </button>
+                    <button className="btn btn-danger" 
+                        onClick={createquizForCourse}
+                        id={`wd-update-${qid}-click`}>
+                        Save
+                    </button> 
+                </a>
             </div>
         </ProtectedEdit> </div>}
     </div>

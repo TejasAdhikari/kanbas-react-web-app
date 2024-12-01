@@ -11,7 +11,7 @@ import QuizEditor from "./Quizzes/Editor";
 import QuizDetails from "./Quizzes/Details";
 import QuizPreview from "./Quizzes/Preview";
 import QuizDetailsEditor from "./Quizzes/DetailsEditor";
-import QuizQuestionsEditor from "./Quizzes/QuestionsEditor";
+import QuizQuestionsEditor from "./Quizzes/Questions";
 
 
 export default function Courses ({ courses }: { courses: any[]; }) {

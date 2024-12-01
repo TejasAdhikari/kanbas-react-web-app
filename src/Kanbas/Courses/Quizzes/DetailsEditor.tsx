@@ -22,14 +22,14 @@ export default function QuizDetailsEditor() {
     const [quizPublished, setquizPublished] = useState("");
     const [quizType, setquizType] = useState("");
     const [quizAssGrp, setquizAssGrp] = useState("");
-    const [quizShuffle, setquizShuffle] = useState("");
+    const [quizShuffle, setquizShuffle] = useState<boolean>(true);
     const [quizTimeLimit, setquizTimeLimit] = useState("");
-    const [quizMultiple, setquizMultiple] = useState("");
+    const [quizMultiple, setquizMultiple] = useState<boolean>(false);;
     const [quizShowCorrAns, setquizShowCorrAns] = useState("");
     const [quizAccessCode, setquizAccessCode] = useState("");
-    const [quizOneQues, setquizOneQues] = useState("");
-    const [quizWebCam, setquizWebCam] = useState("");
-    const [quizLockQuesAns, setquizLockQuesAns] = useState("");
+    const [quizOneQues, setquizOneQues] = useState<boolean>(true);;
+    const [quizWebCam, setquizWebCam] = useState<boolean>(false);;
+    const [quizLockQuesAns, setquizLockQuesAns] = useState<boolean>(false);;
 
     const createquizForCourse = async () => {
         if (!cid) return;
@@ -57,15 +57,15 @@ export default function QuizDetailsEditor() {
             available_date_num: quizFrom,
             until_date_num: quizUntil,
             assignmentGroup: quizAssGrp,
-            shuffleAnswers: (quizShuffle === "Yes" ? true : false),
+            shuffleAnswers: (quizShuffle),
             timeLimit: quizTimeLimit,
-            multipleAttempts: (quizMultiple === "Yes" ? true : false),
+            multipleAttempts: (quizMultiple),
             // numberAttempts: Number,
             showCorrectAnswers: quizShowCorrAns,
             accessCode: quizAccessCode,
-            oneQuestionAtATime: (quizOneQues === "Yes" ? true : false),
-            webcamRequired: (quizWebCam === "Yes" ? true : false),
-            lockQuestionsAfterAnswering: (quizLockQuesAns === "Yes" ? true : false),
+            oneQuestionAtATime: (quizOneQues),
+            webcamRequired: (quizWebCam),
+            lockQuestionsAfterAnswering: (quizLockQuesAns),
             course: cid
         };
         await quizzesClient.updateQuiz(updatedquiz);
@@ -84,15 +84,15 @@ export default function QuizDetailsEditor() {
             available_date_num: quizFrom,
             until_date_num: quizUntil,
             assignmentGroup: quizAssGrp,
-            shuffleAnswers: (quizShuffle === "Yes"  ? true : false),
+            shuffleAnswers: quizShuffle,
             timeLimit: quizTimeLimit,
-            multipleAttempts: (quizMultiple === "Yes" ? true : false),
+            multipleAttempts: (quizMultiple),
             // numberAttempts: Number,
             showCorrectAnswers: quizShowCorrAns,
             accessCode: quizAccessCode,
-            oneQuestionAtATime: (quizOneQues === "Yes" ? true : false),
-            webcamRequired: (quizWebCam === "Yes" ? true : false),
-            lockQuestionsAfterAnswering: (quizLockQuesAns === "Yes" ? true : false),
+            oneQuestionAtATime: (quizOneQues),
+            webcamRequired: (quizWebCam),
+            lockQuestionsAfterAnswering: (quizLockQuesAns),
             course: cid 
         };
         await quizzesClient.updateQuiz(updatedquiz);
@@ -109,16 +109,16 @@ export default function QuizDetailsEditor() {
             setquizFrom(quiz.available_date_num);
             setquizDue(quiz.due_date_num);
             setquizUntil(quiz.until_date_num);
-            setquizAssGrp(quiz.assignmentGroup),
-            setquizShuffle(quiz.shuffleAnswers),
-            setquizTimeLimit(quiz.timeLimit),
-            setquizMultiple(quiz.multipleAttempts),
+            setquizAssGrp(quiz.assignmentGroup);
+            setquizShuffle(quiz.shuffleAnswers);
+            setquizTimeLimit(quiz.timeLimit);
+            setquizMultiple(quiz.multipleAttempts);
             // numberAttempts: Number,
-            setquizShowCorrAns(quiz.showCorrectAnswers),
-            setquizAccessCode(quiz.accessCode),
-            setquizOneQues(quiz.oneQuestionAtATime),
-            setquizWebCam(quiz.webcamRequired),
-            setquizLockQuesAns(quiz.lockQuestionsAfterAnswering)
+            setquizShowCorrAns(quiz.showCorrectAnswers);
+            setquizAccessCode(quiz.accessCode);
+            setquizOneQues(quiz.oneQuestionAtATime);
+            setquizWebCam(quiz.webcamRequired);
+            setquizLockQuesAns(quiz.lockQuestionsAfterAnswering);
         }
     }, [quiz]);
 
@@ -131,7 +131,7 @@ export default function QuizDetailsEditor() {
 
     return (
       <div id="wd-quizzes-editor">
-        <br />
+        <hr />
         <label htmlFor="wd-name">Title</label>
         <div className="input-group mb-4">
             <input id="wd-name" className="form-control" defaultValue={quizName}
@@ -158,7 +158,7 @@ export default function QuizDetailsEditor() {
                             </div> 
                         </div>
 
-                        {(qid !== "new") ? (
+                        {(qid !== "new") && (
                         <div>
                         <div className="row mb-3">
                             <label htmlFor="wd-group" className="text-end col-sm-3 col-form-label">
@@ -166,11 +166,12 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
+                                    value={quizType} 
                                     onChange={(e) => setquizType(e.target.value)}>
-                                    <option selected value="Publish All">Graded Quiz</option>
-                                    <option value="Publish Selected">Practice Quiz</option>
-                                    <option value="Publish All">Graded Survey</option>
-                                    <option value="Publish All">Ungraded Survey</option>
+                                    <option selected value="Graded Quiz">Graded Quiz</option>
+                                    <option value="Practice Quiz">Practice Quiz</option>
+                                    <option value="Graded Survey">Graded Survey</option>
+                                    <option value="Ungraded Survey">Ungraded Survey</option>
                                 </select>
                             </div>
                         </div>
@@ -180,11 +181,12 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
+                                    value={quizAssGrp} 
                                     onChange={(e) => setquizAssGrp(e.target.value)}>
-                                    <option selected value="Publish All">Quizzes </option>
-                                    <option value="Publish Selected">Exams</option>
-                                    <option value="Publish Selected">Assignments</option>
-                                    <option value="Publish Selected">Project</option>
+                                    <option value="Quiz">Quiz </option>
+                                    <option value="Exam">Exam</option>
+                                    <option value="Assingment">Assignment</option>
+                                    <option value="Project">Project</option>
                                 </select>
                             </div>
                         </div>
@@ -194,9 +196,10 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
-                                    onChange={(e) => setquizShuffle(e.target.value)}>
-                                    <option selected value="Publish All">Yes </option>
-                                    <option value="Publish Selected">No</option>
+                                    value={quizShuffle.toString()} // Convert boolean to string for binding
+                                    onChange={(e) => setquizShuffle(e.target.value === "true")}>
+                                    <option value="true">Yes </option>
+                                    <option value="false">No</option>
                                 </select>
                             </div>
                         </div>
@@ -215,9 +218,10 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
-                                    onChange={(e) => setquizMultiple(e.target.value)}>
-                                    <option selected value="Publish All">No </option>
-                                    <option value="Publish Selected">Yes</option>
+                                    value = {quizMultiple.toString()}
+                                    onChange={(e) => setquizMultiple(e.target.value === "true")}>
+                                    <option value="false">No </option>
+                                    <option value="true">Yes</option>
                                 </select>
                             </div>
                         </div>
@@ -248,9 +252,10 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
-                                    onChange={(e) => setquizOneQues(e.target.value)}>
-                                    <option selected value="Publish All">Yes </option>
-                                    <option value="Publish Selected">No</option>
+                                    value={quizOneQues.toString()}
+                                    onChange={(e) => setquizOneQues(e.target.value === "true")}>
+                                    <option value="true">Yes </option>
+                                    <option value="false">No</option>
                                 </select>
                             </div>
                         </div>
@@ -260,9 +265,10 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
-                                    onChange={(e) => setquizWebCam(e.target.value)}>
-                                    <option selected value="Publish All">Yes </option>
-                                    <option value="Publish Selected">No</option>
+                                    value={quizWebCam.toString()}
+                                    onChange={(e) => setquizWebCam(e.target.value === "true")}>
+                                    <option value="true">Yes </option>
+                                    <option value="false">No</option>
                                 </select>
                             </div>
                         </div>
@@ -272,14 +278,15 @@ export default function QuizDetailsEditor() {
                             </label>
                             <div className="col-sm-9">
                                 <select id="wd-group" className="form-select"
-                                    onChange={(e) => setquizLockQuesAns(e.target.value)}>
-                                    <option selected value="Publish All">Yes </option>
-                                    <option value="Publish Selected">No</option>
+                                    value={quizLockQuesAns.toString()}
+                                    onChange={(e) => setquizLockQuesAns(e.target.value === "true")}>
+                                    <option value="true">Yes </option>
+                                    <option value="false">No</option>
                                 </select>
                             </div>
                         </div>
                         
-                        </div>) : (<div></div>)}
+                        </div>)}
 
 
                         <div className="row mb-3">
@@ -324,7 +331,6 @@ export default function QuizDetailsEditor() {
         
         <ProtectedEdit>
             <div className="d-flex justify-content-end">  
-                {/* {(qid !== "new") ? ( */}
                     <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
                         <button className="btn btn-secondary me-1">
                             Cancel
@@ -344,19 +350,6 @@ export default function QuizDetailsEditor() {
                             Save and Publish
                         </button> 
                     </a>
-                    {/* ) : ( */}
-                    {/* <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
-                        <button className="btn btn-secondary me-1">
-                            Cancel
-                        </button>
-                        <button className="btn btn-danger" 
-                            onClick={createquizForCourse}
-                            id={`wd-update-${qid}-click`}>
-                            Save
-                        </button> 
-                    </a> */}
-                    {/* ) */}
-                {/* } */}
             </div>
         </ProtectedEdit>
     </div>

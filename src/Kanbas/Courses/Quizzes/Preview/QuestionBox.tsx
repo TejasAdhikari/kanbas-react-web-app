@@ -1,16 +1,16 @@
 import { Link, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import * as db from "../../Database"
-import ProtectedEdit from "../../Account/ProtectedEdit";
-import ProtectedRouteStudent from "../../Account/ProtectedRouteStudent";
-import { addQuiz, updateQuiz } from "./reducer";
+import * as db from "../../../Database"
+import ProtectedEdit from "../../../Account/ProtectedEdit";
+import ProtectedRouteStudent from "../../../Account/ProtectedRouteStudent";
+import { addQuiz, updateQuiz } from "../reducer";
 import { useSelector, useDispatch } from "react-redux"; 
-import * as coursesClient from "../client";
-import * as quizzesClient from "./client";
+import * as coursesClient from "../../client";
+import * as quizzesClient from "../client";
 import { MdOutlineEdit } from "react-icons/md";
 
 
-export default function QuizPreview() {
+export default function QuestionBox() {
     const { pathname } = useLocation();
     const { cid, qid } = useParams();
     
@@ -44,6 +44,9 @@ export default function QuizPreview() {
         <div className="container">
             <h3>{quiz.title}</h3>
         </div>
+        <hr />
+
+        Place holder
 
     </div>
 );}

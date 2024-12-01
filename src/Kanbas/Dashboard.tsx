@@ -122,7 +122,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
                                 {course.description}
                                 </p>
                                 
-                                <ProtectedEdit>
+                                {!enrolling && (<ProtectedEdit>
                                     <button className="btn btn-primary"> Go </button>
                                     <button onClick={(event) => {
                                         event.preventDefault();
@@ -139,7 +139,7 @@ export default function Dashboard({ courses, setCourses, allCourses, setAllCours
                                         className="btn btn-warning me-2 float-end" >
                                         Edit
                                     </button>
-                                </ProtectedEdit>
+                                </ProtectedEdit>)}
                             </div>
                         </Link>
                     </div>
