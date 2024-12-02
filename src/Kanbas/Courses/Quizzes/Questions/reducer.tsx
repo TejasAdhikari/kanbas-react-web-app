@@ -13,13 +13,17 @@ const questionSlice = createSlice({
     addQuestion: (state, { payload: question }) => {
       const newQuestion: any = {
         _id: new Date().getTime().toString(),
+        questionType: question.type,
         description: question.description,
         points: question.points,
+        correctAnswer: question.correctAnswer,
+        possibleAnswers: question.possibleAnswers,
         quiz: question.quiz,
+        
       };
       state.questions = [...state.questions, newQuestion] as any;
     },
-    deleteQuuestion: (state, { payload: questionId }) => {
+    deleteQuestion: (state, { payload: questionId }) => {
       state.questions = state.questions.filter((q: any) => 
         q._id !== questionId);
     },
@@ -36,6 +40,6 @@ const questionSlice = createSlice({
   },
 });
 
-export const { addQuestion, deleteQuuestion, updateQuestion, setQuestions } =
+export const { addQuestion, deleteQuestion, updateQuestion, setQuestions } =
   questionSlice.actions;
 export default questionSlice.reducer;

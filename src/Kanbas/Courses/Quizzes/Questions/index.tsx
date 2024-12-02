@@ -8,9 +8,11 @@ import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../../client";
 import * as quizzesClient from "../client";
 import { MdOutlineEdit } from "react-icons/md";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import NewQuestionEditor from "./NewQuestionEditor";
-import { setQuestions, deleteQuuestion } from "../Questions/reducer";
+import { setQuestions, deleteQuestion } from "../Questions/reducer";
+import * as questionsClient from "./client"
+import QuestionDelete from "./QuestionDelete";
 
 
 export default function QuizQuestionsEditor() {
@@ -27,31 +29,17 @@ export default function QuizQuestionsEditor() {
     const { questions } = useSelector((state: any) => state.questionReducer);
     // const quizQuestions = questions.find((question: any) => question.quiz === qid);
 
-    // const [quizName, setquizName] = useState("");
-    // const [quizDesc, setquizDesc] = useState("");
-    // const [quizPoints, setquizPoints] = useState("");
-    // const [quizDue, setquizDue] = useState("");
-    // const [quizFrom, setquizFrom] = useState("");
-
-    // const createquizForCourse = async () => {
-    //     if (!cid) return;
-    //     const newquiz = { 
-    //         title: quizName,
-    //         description: quizDesc,
-    //         points: quizPoints,
-    //         due_date_num: quizDue,
-    //         available_date_num: quizFrom,
-    //         until_date_num: quizUntil,
-    //         course: cid 
-    //     };
-    //     const quiz = await coursesClient.createQuizForCourse(cid, newquiz);
-    //     dispatch(addQuiz(quiz));
-    // };
+    
     
     const fetchQuestions = async () => {
         const questions = await quizzesClient.findQuestionsForQuiz(qid as string);
         console.log(questions);
         dispatch(setQuestions(questions));
+    };
+
+    const removeQuestion = async (questionId: string) => {
+        await questionsClient.deleteQuestion(questionId);
+        dispatch(deleteQuestion(questionId));
     };
     
     useEffect(() => {
@@ -95,11 +83,20 @@ export default function QuizQuestionsEditor() {
                     <div className="wd-title p-3 ps-2 bg-secondary">
                         {"Question Number"}
                     </div>
-                    {/* {module.lessons && ( */}
                     <ul className="wd-questions list-group rounded-0">
-                    {/* {module.lessons.map((lesson: any) => ( */}
                         <li className="wd-lesson list-group-item p-3 ps-1">
                             {question.description}
+                            <div className="float-end">
+                                {/* <ProtectedEdit> */}
+                                <FaTrash className="text-danger me-2 mb-1" 
+                                    data-bs-toggle="modal" data-bs-target={`#wd-delete-${question._id}-dialog`}/>
+                                {/* </ProtectedEdit>  */}
+                                {/* <GreenCheckmark /> */}
+                                {/* <IoEllipsisVertical className="fs-4" /> */}
+                                <QuestionDelete dialogTitle="Delete Assignment" 
+                                                questionId={question._id}
+                                                deleteQuestion={removeQuestion} />
+                                </div>
                             <hr />
                             <form >
                             {question.possibleAnswers.map((answer: any) => (

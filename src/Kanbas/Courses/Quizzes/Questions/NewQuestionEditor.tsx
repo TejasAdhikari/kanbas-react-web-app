@@ -2,13 +2,56 @@ import { FaPlus } from "react-icons/fa";
 import MultipleChoiceEditor from "./MultipleChoiceEditor";
 import TrueFalseEditor from "./TrueFalseEditor";
 import FITBEditor from "./FITBEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { addQuestion } from "./reducer";
+import * as quizClient from "../client";
 
 
-export default function NewQuestionEditor({ questionId }:{ questionId: string }
+export default function NewQuestionEditor({ questionId }:{ 
+  questionId: string,
+  // fetchQuestions: () => void
+}
   ) {
+      const { qid } = useParams();
 
-    const [ type, settype ] = useState("Multiple Choice"); 
+      const [ type, settype ] = useState("multiple choice"); 
+      const [questionPoints, setquestionPoints] = useState<number>(5);
+      const [questionDesc, setquestionDesc] = useState("");
+      const [questionCorrAns, setquestionCorrAns] = useState("");
+      const [possibleAnswers, setPossibleAnswers] = useState([
+          {
+              text: "",
+              isCorrect: false,
+          },
+      ]);
+      // const [questionType, setquestionType] = useState("");
+      // const [question, setquizFrom] = useState("");
+
+      const createquestionForQuiz = async (qs: any) => {
+          if (!qid) return;
+          const newquestion = { 
+              questionType: qs.type,
+              description: qs.questionDesc,
+              points: qs.questionPoints,
+              correctAnswer: qs.questionCorrAns,
+              possibleAnswers: qs.possibleAnswers,
+              quiz: qid 
+          };
+          const question = await quizClient.createQuestionForQuiz(qid, newquestion);
+          dispatch(addQuestion(question));
+      };
+
+      const dispatch = useDispatch();
+
+    //   useEffect(() => {
+    //     if(qid !== "new"){
+    //         // setquestionDesc(quiz.description);
+    //         // setquestionPoints(quiz.points);
+    //         fetchQuestions();
+    //     }
+    // }, []);
 
       return (
         <div id="wd-add-question-dialog" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -29,7 +72,7 @@ export default function NewQuestionEditor({ questionId }:{ questionId: string }
                                 // value={quizAssGrp} 
                                 onChange={(e) => settype(e.target.value)}
                                 >
-                                <option value="Multiple Choice">Multiple Choice </option>
+                                <option value="multiple choice">Multiple Choice </option>
                                 <option value="True/False">True/False</option>
                                 <option value="Fill in the Blank">Fill in the Blank</option>
                             </select>
@@ -39,7 +82,7 @@ export default function NewQuestionEditor({ questionId }:{ questionId: string }
                         </label>
                         <div className="col-sm-3">
                             <input id="wd-points" type="number" className="form-control" 
-                            // defaultValue={quizPoints} 
+                            // defaultValue={questionPoints} 
                                 // onChange={(e) => setquizPoints(e.target.value)}
                                 />
                         </div> 
@@ -47,16 +90,22 @@ export default function NewQuestionEditor({ questionId }:{ questionId: string }
                 <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
               </div>
               
-              {type === "Multiple Choice" && (<MultipleChoiceEditor questionId={questionId}/>)}
+              {type === "multiple choice" && 
+                  (<MultipleChoiceEditor questionId={questionId}
+                                          createquestionForQuiz={createquestionForQuiz}
+                                          // questionDesc={questionDesc} 
+                                          // questionPoints={questionPoints} 
+                                          // questionCorrAns={questionCorrAns} 
+                                          // possibleAnswers={possibleAnswers}
+                                          // setquestionPoints={setquestionPoints}
+                                          // setquestionDesc={setquestionDesc}
+                                          // setquestionCorrAns={setquestionCorrAns}
+                                          // setPossibleAnswers={setPossibleAnswers}
+                                          />)}
               {type === "True/False" && (<TrueFalseEditor questionId={questionId} />)}
               {type === "Fill in the Blank" && (<FITBEditor questionId={questionId} />)}
 
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                  Cancel </button>
-                <button type="button" data-bs-dismiss="modal" className="btn btn-danger">
-                  Add Question </button>
-              </div>
+            
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import * as coursesClient from "../../client";
 import * as quizzesClient from "../client";
 import { MdOutlineEdit } from "react-icons/md";
 import QuestionBox from "./QuestionBox";
-import { setQuestions, deleteQuuestion } from "../Questions/reducer";
+import { setQuestions } from "../Questions/reducer";
 
 export default function QuizPreview() {
     const { pathname } = useLocation();
@@ -29,7 +29,7 @@ export default function QuizPreview() {
 
     const fetchQuestions = async () => {
         const questions = await quizzesClient.findQuestionsForQuiz(qid as string);
-        console.log(questions);
+        // console.log(questions);
         dispatch(setQuestions(questions));
     };
     
