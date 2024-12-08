@@ -3,7 +3,8 @@ import { courses } from "../Database";
 
 export default function CoursesNavigation() {
   const { pathname } = useLocation();
-  const links = ["Home", "Modules", "Piazza", "Zoom", 
+  const links = ["Home", "Modules", 
+    // "Piazza", "Zoom", 
     "Assignments", "Quizzes", "Grades", "People"];
     
   const { cid } = useParams();

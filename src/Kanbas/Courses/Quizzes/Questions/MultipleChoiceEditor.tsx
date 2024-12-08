@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { addQuiz } from "../reducer";
 import { useParams } from "react-router";
 import * as quizClient from "../client";
 import { addQuestion, setQuestions } from "../Questions/reducer"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 // type PossibleAnswer = {
@@ -44,6 +44,9 @@ export default function MultipleChoiceEditor({ questionId, createquestionForQuiz
         },
     ]);
 
+    const { questions } = useSelector((state: any) => state.questionReducer);
+    const question = questions.find((question: any) => question._id === questionId);
+    
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         setPossibleAnswers((prev) =>
@@ -69,6 +72,20 @@ export default function MultipleChoiceEditor({ questionId, createquestionForQuiz
     };
 
     const dispatch = useDispatch();
+
+    // console.log("Multiple Choice 1");
+    
+    useEffect(() => {
+        if(questionId !== "new"){
+            settype(question.questionType)
+            setquestionDesc(question.description);
+            setquestionPoints(question.points);
+            setquestionCorrAns(question.correctAnswer);
+            setPossibleAnswers(question.possibleAnswers);
+            // fetchQuestions();
+
+        }
+    }, []);
     
     return (
             <div>
@@ -76,15 +93,16 @@ export default function MultipleChoiceEditor({ questionId, createquestionForQuiz
                     <label htmlFor="wd-points" className="text-start col-sm-2 mt-2 col-form-label">
                         {"Question: "} 
                     </label>
-                    <textarea className="form-control" defaultValue={questionDesc} 
-                        placeholder="Module Name"
-                             onChange={(e) => setquestionDesc(e.target.value)}
+                    <textarea className="form-control" 
+                    // defaultValue={questionId !== "new" ? questionDesc : "Question Description"} 
+                        placeholder="Question Description"
+                            onChange={(e) => setquestionDesc(e.target.value)}
                     />
                     <label htmlFor="wd-points" className="text-start col-sm-2 mt-2 col-form-label">
                         {"Answer: "} 
                     </label>
                         
-                    <div className="row">
+                    {/* <div className="row">
                         <label htmlFor="wd-points" className="text-end col-sm-4 mt-2 col-form-label">
                             {"Correct Answer "} 
                         </label>
@@ -99,7 +117,7 @@ export default function MultipleChoiceEditor({ questionId, createquestionForQuiz
                                     // onClick={() => deleteModule(moduleId)}
                                     />
                         </div>
-                    </div>
+                    </div> */}
                     <div className="row">
                         <label htmlFor="wd-points" className="text-end col-sm-4 mt-2 col-form-label">
                             {"Possible Answer "} 

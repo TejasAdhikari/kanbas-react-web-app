@@ -47,16 +47,23 @@ export default function QuizPreview() {
       <div id="wd-quizzes-editor">    
         
         <div className="container">
-            <h3>{quiz.title}</h3>
+            <div className="d-flex">
+                <h3>{quiz.title}</h3>
+                <a href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/editor/questions`}>
+                    <button id="wd-edit-quiz-btn" className="btn btn-lg btn-primary me-1 float-end">
+                            Edit
+                    </button>
+                </a>
+            </div>
         </div>
         <hr />
 
         {/* <QuestionBox /> */}
         <ul id="wd-modules" className="list-group p-5 rounded-0">
-            {questions.map((question: any) => (
+            {questions.map((question: any, index: any) => (
             <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
                 <div className="wd-title p-3 ps-2 bg-secondary">
-                    {"Question Number"}
+                    {"Question " + (index + 1)}
                 </div>
                 {/* {module.lessons && ( */}
                 <ul className="wd-questions list-group rounded-0">
@@ -64,22 +71,42 @@ export default function QuizPreview() {
                     <li className="wd-lesson list-group-item p-3 ps-1">
                         {question.description}
                         <hr />
-                        <form >
-                        {question.possibleAnswers.map((answer: any) => (
-                            <div className="ps-2 col-12">
-                                <div className="list-group" id="list-tab" role="tablist">
-                                    <div className="form-check">                                        
-                                        <label key={answer.text} className="form-check-label">
-                                            <input className="form-check-input" 
-                                                type="radio" 
-                                                name="exampleRadios"
-                                                value={answer.text}/>
-                                            {answer.text}
-                                        </label>
-                                    </div>
+
+                        {question.questionType === "Fill-in-the-Blank" ? 
+                            <div className="row">
+                                
+                                <label htmlFor="wd-answer" className="text-end col-sm-4 mt-2 col-form-label">
+                                    {"Answer "} 
+                                </label>
+
+                                <div className="col-sm-6 mt-2">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        // value={questionCorrAns}
+                                        // onChange={(e) => setquestionCorrAns(e.target.value)}
+                                        placeholder="Enter your answer"
+                                    />      
                                 </div>
-                            </div>
-                        ))}</form>
+                            </div> 
+                            :<form >
+                                {question.possibleAnswers.map((answer: any) => (
+                                    <div className="ps-2 col-12">
+                                        <div className="list-group" id="list-tab" role="tablist">
+                                            <div className="form-check">                                        
+                                                <label key={answer.text} className="form-check-label">
+                                                    <input className="form-check-input" 
+                                                        type="radio" 
+                                                        name="exampleRadios"
+                                                        value={answer.text}/>
+                                                    {answer.text}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </form>
+                        }
                     </li>
                 </ul>
 

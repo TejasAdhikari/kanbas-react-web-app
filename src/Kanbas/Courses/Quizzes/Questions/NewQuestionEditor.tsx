@@ -5,15 +5,16 @@ import FITBEditor from "./FITBEditor";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { addQuestion } from "./reducer";
+import { addQuestion, updateQuestion } from "./reducer";
 import * as quizClient from "../client";
 
 
-export default function NewQuestionEditor({ questionId }:{ 
+export default function NewQuestionEditor({ questionId, fetchQuestions }:{ 
   questionId: string,
-  // fetchQuestions: () => void
+  fetchQuestions: () => void
 }
   ) {
+
       const { qid } = useParams();
 
       const [ type, settype ] = useState("multiple choice"); 
@@ -35,12 +36,13 @@ export default function NewQuestionEditor({ questionId }:{
               questionType: qs.type,
               description: qs.questionDesc,
               points: qs.questionPoints,
-              correctAnswer: qs.questionCorrAns,
+              correctAnswer: qs.possibleAnswers.find((a: any) => a.isCorrect)?.text || possibleAnswers[0].text,
               possibleAnswers: qs.possibleAnswers,
               quiz: qid 
           };
           const question = await quizClient.createQuestionForQuiz(qid, newquestion);
           dispatch(addQuestion(question));
+          fetchQuestions();
       };
 
       const dispatch = useDispatch();
@@ -52,6 +54,8 @@ export default function NewQuestionEditor({ questionId }:{
     //         fetchQuestions();
     //     }
     // }, []);
+
+    // console.log(questionId);
 
       return (
         <div id="wd-add-question-dialog" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -83,7 +87,7 @@ export default function NewQuestionEditor({ questionId }:{
                         <div className="col-sm-3">
                             <input id="wd-points" type="number" className="form-control" 
                             // defaultValue={questionPoints} 
-                                // onChange={(e) => setquizPoints(e.target.value)}
+                            //     onChange={(e) => setquestionPoints(Number(e.target.value))}
                                 />
                         </div> 
                     </div>
@@ -102,8 +106,12 @@ export default function NewQuestionEditor({ questionId }:{
                                           // setquestionCorrAns={setquestionCorrAns}
                                           // setPossibleAnswers={setPossibleAnswers}
                                           />)}
-              {type === "True/False" && (<TrueFalseEditor questionId={questionId} />)}
-              {type === "Fill in the Blank" && (<FITBEditor questionId={questionId} />)}
+              {type === "True/False" && (<TrueFalseEditor questionId={questionId} 
+                                        createquestionForQuiz={createquestionForQuiz}
+                                        // quizId={qid as string}
+                                        />)}
+              {type === "Fill in the Blank" && (<FITBEditor questionId={questionId} 
+                                                  createquestionForQuiz={createquestionForQuiz}/>)}
 
             
             </div>

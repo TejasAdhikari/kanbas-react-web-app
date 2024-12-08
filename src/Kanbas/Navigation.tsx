@@ -12,9 +12,9 @@ export default function KanbasNavigation() {
   const links = [
     { label: "Dashboard", path: "/Kanbas/Dashboard", icon: AiOutlineDashboard },
     { label: "Courses",   path: "/Kanbas/Dashboard", icon: LiaBookSolid },
-    { label: "Calendar",  path: "/Kanbas/Calendar",  icon: GrFormSchedule },
-    { label: "Inbox",     path: "/Kanbas/Inbox",     icon: HiMiniInboxArrowDown },
-    { label: "Labs",      path: "/Labs",             icon: TbDeviceDesktopCog },
+    // { label: "Calendar",  path: "/Kanbas/Calendar",  icon: GrFormSchedule },
+    // { label: "Inbox",     path: "/Kanbas/Inbox",     icon: HiMiniInboxArrowDown },
+    // { label: "Labs",      path: "/Labs",             icon: TbDeviceDesktopCog },
   ];
 
   

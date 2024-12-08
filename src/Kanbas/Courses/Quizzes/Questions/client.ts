@@ -4,8 +4,9 @@ const axiosWithCredentials = axios.create({ withCredentials: true });
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const QUESTIONS_API = `${REMOTE_SERVER}/api/questions`;
 
-export const deleteQuestion = async (qustionId: string) => {
-    const response = await axiosWithCredentials.delete(`${QUESTIONS_API}/${qustionId}`);
+export const deleteQuestion = async (questionId: string) => {
+    // console.log(questionId);
+    const response = await axiosWithCredentials.delete(`${QUESTIONS_API}/${questionId}`);
     return response.data;
 };
 export const updateQuestion = async (question: any) => {
