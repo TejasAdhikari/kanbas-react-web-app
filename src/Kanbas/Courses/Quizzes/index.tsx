@@ -67,10 +67,14 @@ export default function Quizzes() {
                           <MdOutlineQuiz className="me-1 text-success"/>
                         </div>
                         <div className="align-self-center flex-grow-1">
-                          <a className="wd-assignment-link"
-                            href={`#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}>
-                            {quiz.title}
-                          </a><br />
+                          {(currentUser.role === "FACULTY" || quiz.published) ?
+                            <a className="wd-assignment-link"
+                              href={`#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}>
+                              {quiz.title}
+                            </a> :
+                            quiz.title  
+                          }
+                          <br />
                           {/* <div className="wd-float-left text-danger me-1">
                             Multiple module | 
                           </div> */}

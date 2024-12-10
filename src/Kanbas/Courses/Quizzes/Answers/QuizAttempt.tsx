@@ -8,12 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../../client";
 import * as quizzesClient from "../client";
 import { MdOutlineEdit } from "react-icons/md";
-import QuestionBox from "./QuestionBox";
 import { setQuestions } from "../Questions/reducer";
-import { TiTick } from "react-icons/ti";
-import { RxCross2 } from "react-icons/rx";
 
-export default function QuizPreview() {
+export default function QuizAttempt() {
     const { pathname } = useLocation();
     const { cid, qid } = useParams();
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -32,7 +29,6 @@ export default function QuizPreview() {
     );;
     const [previousAnswers, setPreviousAnswers] = useState<any>([]);
     const [ displayPrev, setdisplayPrev] = useState<Boolean>(true);
-    const [ displayCorrect, setdisplayCorrect] = useState<Boolean>(false);
 
 
     const fetchQuestions = async () => {
@@ -42,10 +38,26 @@ export default function QuizPreview() {
     };
 
     const fetchSubmission = async () => {
-        const userId = currentUser._id; 
-        const submission = await quizzesClient.getSubmission(qid, userId);
-        console.log("Submission: " + submission?.answers);
-        setPreviousAnswers(submission || []);
+        // const userId = currentUser._id; 
+        // const submission = await quizzesClient.getSubmission(qid, userId);
+        // console.log("Submission: " + submission);
+        // setPreviousAnswers(submission || []);
+
+        try {
+            const userId = currentUser._id;
+            const submission = await quizzesClient.getSubmission(qid, userId);
+    
+            // Log the fetched data for debugging
+            console.log("Submission:", submission);
+    
+            // Set default values if submission is null/undefined
+            setPreviousAnswers(submission || { answers: [] });
+        } catch (error) {
+            console.error("Error fetching submission:", error);
+    
+            // Ensure a fallback state
+            setPreviousAnswers({ answers: [] });
+        }
     };
       
     //Handle answer Changes
@@ -87,120 +99,16 @@ export default function QuizPreview() {
       <div id="wd-quizzes-editor">    
         <div className="wd-title p-3 ps-2 d-flex justify-content-between align-items-center">
             <h3>{quiz.title}</h3>
-            {displayPrev && <div className="float-end">
-                <a href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/editor/questions`}>
-                    <button  className="btn btn-lg btn-primary me-1">
-                            Edit
-                    </button>
-                </a>
-            </div>   }  
         </div>
         
         <hr />
 
-        {displayPrev && 
-            <div className="d-flex justify-content-center">
-                <button className="btn btn-danger mb-4 me-4"
-                    onClick={(e) => setdisplayPrev(!displayPrev)}>
-                    Take Quiz
-                </button>
-                <h5 className="me-2">{"Previous Score: " + (previousAnswers?.score !== undefined ? previousAnswers.score :"Not Attempted")}</h5>
-                <h5>{"Submitted At: " + (previousAnswers?.submittedAt !== undefined ? previousAnswers.submittedAt :"Not Attempted")}</h5>
-            </div>
-        }
-        {!displayPrev && <div className="d-flex justify-content-center">Quiz Started</div>}
+        <div className="d-flex justify-content-center">Quiz Started</div>
         <hr />
         <ul id="wd-modules" className="list-group p-5 rounded-0">
 
 
-
-
-        {/* {questions.map((question: any, index: any) => {
-            const previousAnswer = previousAnswers.find(
-                (a: any) => a.question === question._id
-            )?.selectedAnswer;
-
-            return (
-                <li key={question._id} className="list-group-item">
-                    <div>{question.description}</div>
-                    {question.possibleAnswers.map((answer: any) => (
-                        <label key={answer.text}>
-                        <input
-                            type="radio"
-                            name={`question-${question._id}`}
-                            value={answer.text}
-                            checked={answers.find((a: any) => a.question === question._id)?.selectedAnswer === answer.text || previousAnswer === answer.text}
-                            onChange={() => handleAnswerChange(question._id, answer.text)}
-                            disabled={!!previousAnswer}
-                        />
-                        {answer.text}
-                        </label>
-                    ))}
-                </li>
-            );
-        })} */}
-
-
-
-            
-
-
-
-        {displayPrev ?
-
-            // "Test"
-            (questions?.map((question: any, index: any) => (
-                <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray" key={index}>
-                    <div className="wd-title p-3 ps-2 bg-secondary">
-                        {"Question " + (index + 1)}
-                        <div className="float-end">
-                            {"Points: " + question.points}
-                        </div>
-                    </div>
-                    {/* {module.lessons && ( */}
-                    <ul className="wd-questions list-group rounded-0">
-                      {/* {module.lessons.map((lesson: any) => ( */}
-                        <li className="wd-lesson list-group-item p-3 ps-1">
-                            {question.description}
-                            <hr />
-                                <form >
-                                    <div className="ps-2 col-12 mb-2" >
-                                        <div>
-                                            {previousAnswers?.answers?.[index].isCorrect ? 
-                                                            <TiTick className="text-success float-end"/> 
-                                                            : previousAnswers?.answers?.[index].isCorrect === null ? 
-                                                                <RxCross2 className="text-danger float-end"/> : 
-                                                                <div></div> }
-                                        </div>
-                                        <div>{"Your Answer: " + 
-                                           (previousAnswers?.answers?.[index]?.selectedAnswer !== null ? 
-                                            previousAnswers?.answers?.[index]?.selectedAnswer :
-                                             "Not Answered")
-
-                                           // previousAnswers.answers[index].selectedAnswer 
-                                           }
-                                        </div>
-                                    </div>
-                                    {question.possibleAnswers.map((answer: any) => (
-                                        <div className="ps-2 col-12">
-                                            <div className="list-group" id="list-tab" role="tablist">
-                                                <div className="form-check">                                        
-                                                    <label key={answer.text} className="form-check-label">
-                                                        {answer.isCorrect && ("Correct Answer: " + answer.text)}
-                                                    </label>
-
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </form>
-                        </li>
-                    </ul>
-                </li>
-            )))
-            :
-             (questions.map((question: any, index: any) => (
+        {questions.map((question: any, index: any) => (
                 <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
                     <div className="wd-title p-3 ps-2 bg-secondary">
                         {"Question " + (index + 1)}
@@ -260,7 +168,7 @@ export default function QuizPreview() {
                         </li>
                     </ul>
                 </li>
-            )))
+            ))
         }
         </ul> 
         <hr />
@@ -270,12 +178,11 @@ export default function QuizPreview() {
                     Cancel 
                 </button>
             </a>
-            {!displayPrev && 
-            <a href={"javascript:history.back()"}>
+            <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
                 <button type="button" className="btn btn-danger" onClick={handleSubmitQuiz}>
                     Submit Quiz 
                 </button>
-            </a>}
+            </a>
         </div>
     </div>
 );}

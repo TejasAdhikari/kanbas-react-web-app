@@ -182,7 +182,7 @@ export default function QuizQuestionsEditor() {
                                                                         : "Possible Answer : ") +  
                                                             answer.text)}
                                                         { question.editing &&
-                                                            <label >{(answer.isCorrect ? "Correct Answer : "
+                                                            <div >{(answer.isCorrect ? "Correct Answer : "
                                                                 : "Possible Answer : ")}
                                                             <input className="form-control w-50 d-inline-block"
                                                                 onChange={(e) => dispatch(updateQuestion({ 
@@ -196,7 +196,17 @@ export default function QuizQuestionsEditor() {
                                                                 }
                                                                 }}
                                                                 defaultValue={answer.text}/>
-                                                            </label>
+                                                            </div>
+
+                                                            // <input className="form-control w-50 d-inline-block"
+                                                            // onChange={(e) => dispatch(updateQuestion({ ...question, description: e.target.value }))}
+                                                            // onKeyDown={(e) => {
+                                                            //     if (e.key === "Enter") {
+                                                            //         saveQuestion({ ...question, editing: false });
+                                                            //     }
+                                                            // }}
+                                                            // defaultValue={question.description}/>
+                                                            // )}
                                                         }
                                                     </label>
                                                 </div>

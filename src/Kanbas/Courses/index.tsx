@@ -12,6 +12,8 @@ import QuizDetails from "./Quizzes/Details";
 import QuizPreview from "./Quizzes/Preview";
 import QuizDetailsEditor from "./Quizzes/DetailsEditor";
 import QuizQuestionsEditor from "./Quizzes/Questions";
+import QuizAttempt from "./Quizzes/Answers/QuizAttempt";
+import PreviousAttempt from "./Quizzes/Answers/PreviousAttempt";
 
 
 export default function Courses ({ courses }: { courses: any[]; }) {
@@ -45,6 +47,8 @@ export default function Courses ({ courses }: { courses: any[]; }) {
                     <Route path="Quizzes/:qid" element={<QuizDetails />} />
                     <Route path="Quizzes/:qid/editor/*" element={<QuizEditor />} />
                     <Route path="Quizzes/:qid/preview" element={<QuizPreview />} />
+                    <Route path="Quizzes/:qid/attempt" element={<QuizAttempt />} />
+                    <Route path="Quizzes/:qid/prevAttempt" element={<PreviousAttempt />} />
                     {/* <Route path="Quizzes/:qid/editor/details" element={<QuizDetailsEditor />} />
                     <Route path="Quizzes/:qid/editor/questions" element={<QuizQuestionsEditor />} /> */}
                     <Route path="Grades" element={<h2>Grades</h2>} />

@@ -8,32 +8,44 @@ import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../client";
 import * as quizzesClient from "./client";
 import { MdOutlineEdit } from "react-icons/md";
+import PreviousAttempt from "./Answers/PreviousAttempt";
 
 
 export default function QuizDetails() {
     const { cid, qid } = useParams();
-    
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
     
     // Set up local state for form inputs
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const quiz = quizzes.find((quiz: any) => quiz._id === qid);
-    // const [quizName, setquizName] = useState("");
-    // const [quizDesc, setquizDesc] = useState("");
-    // const [quizPoints, setquizPoints] = useState("");
-    // const [quizDue, setquizDue] = useState("");
-    // const [quizFrom, setquizFrom] = useState("");
+    const [previousAnswers, setPreviousAnswers] = useState<any>([]);
+    const [canAttempt, setCanAttempt] = useState<Boolean>(true);
 
+    const fetchSubmission = async () => {
+        try {
+            const userId = currentUser._id;
+            const submission = await quizzesClient.getSubmission(qid, userId);
     
+            // Log the fetched data for debugging
+            console.log("Submission attempts:", submission?.attempts);
     
-    // useEffect(() => {
-    //     if(qid !== "new"){
-    //         setquizName(quiz.title);
-    //         setquizDesc(quiz.description);
-    //         setquizPoints(quiz.points);
-    //         setquizFrom(quiz.available_date_num);
-    //         setquizDue(quiz.due_date_num);
-    //     }
-    // }, [quiz]);
+            // Set default values if submission is null/undefined
+            setPreviousAnswers(submission || { answers: [] });
+            setCanAttempt(submission.attempts >= quiz.numberAttempts ? false : true);
+        } catch (error) {
+            console.error("Error fetching submission:", error);
+    
+            // Ensure a fallback state
+            setPreviousAnswers({ answers: [] });
+        }
+    };
+    
+    useEffect(() => {
+        if(qid !== "new"){
+            fetchSubmission();
+        }
+        // console.log(canAttempt);
+    }, [quiz, canAttempt]);
 
     const dispatch = useDispatch();
 
@@ -61,11 +73,16 @@ export default function QuizDetails() {
 
             <ProtectedRouteStudent> 
                 <div className="d-flex justify-content-center">
-                    <a href={`#/Kanbas/Courses/${cid}/Quizzes`}>
-                        <button className="btn btn-danger mt-4 mb-5">
+                    {canAttempt && <a href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/attempt`}>
+                        <button className="btn btn-danger mt-4 mb-5 me-5">
                             Start Quiz
                         </button>
-                    </a>
+                    </a>}
+                    {(previousAnswers?.attempts > 0) && <a href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/prevAttempt`}>
+                        <button className="btn btn-primary mt-4 mb-5">
+                            Previous Attempt
+                        </button>
+                    </a>}
                 </div>
             </ProtectedRouteStudent>
             <ProtectedEdit>
