@@ -128,14 +128,14 @@ export default function PreviousAttempt() {
                                     <form >
                                         <div className="ps-2 col-12 mb-2" >
                                             <div className="mb-2">
-                                                {previousAnswers?.answers?.[index].isCorrect ? 
+                                                {previousAnswers?.answers?.[index]?.isCorrect ? 
                                                             <TiTick className="text-success float-end"/> 
-                                                            : previousAnswers?.answers?.[index].isCorrect === null ? 
+                                                            : (previousAnswers?.answers?.[index]?.isCorrect !== null ? 
                                                                 <RxCross2 className="text-danger float-end"/> : 
-                                                                <div></div> }
+                                                                <div></div>) }
                                             </div>
                                             <div>{"Your Answer: " + 
-                                                (previousAnswers?.answers?.[index]?.selectedAnswer !== null ? 
+                                                (previousAnswers?.answers?.[index]?.selectedAnswer !== undefined ? 
                                                     previousAnswers?.answers?.[index]?.selectedAnswer :
                                                      "Not Answered")
 

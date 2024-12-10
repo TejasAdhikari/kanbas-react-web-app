@@ -73,7 +73,7 @@ export default function QuizDetails() {
 
             <ProtectedRouteStudent> 
                 <div className="d-flex justify-content-center">
-                    {canAttempt && <a href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/attempt`}>
+                    {(canAttempt || quiz.multipleAttempts) && <a href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/attempt`}>
                         <button className="btn btn-danger mt-4 mb-5 me-5">
                             Start Quiz
                         </button>
