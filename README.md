@@ -1,3 +1,28 @@
+# Panvas
+
+Panvas is a full-stack web application that replicates the key functionalities of the Canvas learning management system. It allows users to manage assignments, grades, and courses.
+
+## Technologies Used
+- **Frontend:** React.js, HTML, CSS
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **Deployment:** Netlify
+
+## Features
+- User authentication and authorization
+- Course management
+- Assignment submission and grading
+
+## How to Run
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the server: `npm start`
+4. Open your browser and navigate to `http://localhost:3000`
+
+## Screenshots
+![Home Page](screenshots/home.png)
+![Course Page](screenshots/course.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
